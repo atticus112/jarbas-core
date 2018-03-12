@@ -566,7 +566,7 @@ class MycroftSkill:
                            self.handle_set_cross_context)
             self.add_event("mycroft.skill.remove_cross_context",
                            self.handle_remove_cross_context)
-            self.add_event("converse.deactivate", self.on_deactivate)
+            self.add_event("converse.deactivate", self._deactivate)
             name = 'mycroft.skills.settings.update'
             func = self.settings.run_poll
             bus.on(name, func)
@@ -598,7 +598,12 @@ class MycroftSkill:
         """
         return None
 
-    def on_deactivate(self, message):
+    def _deactivate_skill(self, message):
+        skill_id = message.data.get("skill_id")
+        if skill_id == self.skill_id:
+            self.on_deactivate()
+
+    def on_deactivate(self):
         """
         Invoked when the skill is removed from active skill list
         """
