@@ -82,11 +82,11 @@ to update jarbas-core
 
 # Links:
 
-* [My website](jarbasai.github.io)
+* [My website](https://jarbasai.github.io)
 * [Patreon](https://www.patreon.com/jarbasAI)
 * [Paypal](https://paypal.me/jarbasAI)
 * [My old github](https://github.com/JarbasAI)
-* [Twitter](twitter.com/JarbasAi)
+* [Twitter](https://twitter.com/JarbasAi)
 
 
 # Mycroft Links
