@@ -72,25 +72,34 @@ def extract_numbers_generic(text, pronounce_handler, extract_handler,
     """
     numbers = []
     normalized = text
-    extract = extract_handler(normalized, short_scale, ordinals)
+    extract = extract_handler(normalized, short_scale=short_scale,
+                              ordinals=ordinals)
     to_parse = normalized
     while extract:
         numbers.append(extract)
         prev = to_parse
-        num_txt = pronounce_handler(extract)
+        num_txt = pronounce_handler(extract, short_scale=short_scale)
         extract = str(extract)
         if extract.endswith(".0"):
             extract = extract[:-2]
 
-        # handle duplicate occurences, replace last one only
+        # handle duplicate occurrences, replace last one only
         def replace_right(source, target, replacement, replacements=None):
             return replacement.join(source.rsplit(target, replacements))
 
         normalized = replace_right(normalized, num_txt, extract, 1)
+        # replace ordinal pronunciation
+        to_parse = replace_right(to_parse, num_txt, extract, 1)
+        if ordinals:
+            num_txt2 = pronounce_handler(int(extract),
+                                         short_scale=short_scale,
+                                         ordinals=ordinals)
+            normalized = replace_right(normalized, num_txt2, extract, 1)
+            to_parse = replace_right(to_parse, num_txt2, extract, 1)
+
+        to_parse = replace_right(to_parse, extract, " ", 1)
         # last biggest number was replaced, recurse to handle cases like
         # test one two 3
-        to_parse = replace_right(to_parse, num_txt, extract, 1)
-        to_parse = replace_right(to_parse, extract, " ", 1)
         if to_parse == prev:
             # avoid infinite loops, occasionally pronounced number may be
             # different from extracted text,
@@ -98,6 +107,7 @@ def extract_numbers_generic(text, pronounce_handler, extract_handler,
             extract = False
             # TODO fix this
         else:
-            extract = extract_handler(to_parse, short_scale, ordinals)
+            extract = extract_handler(to_parse, short_scale=short_scale,
+                                      ordinals=ordinals)
     numbers.reverse()
     return numbers

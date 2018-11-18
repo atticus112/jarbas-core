@@ -521,23 +521,17 @@ class TestNormalize(unittest.TestCase):
         # NOTE ambiguous case, should return [3] or [3, 1] ?
         self.assertEqual(extract_numbers("third one", ordinals=True),
                          [3, 1])
+        self.assertEqual(extract_numbers("thirty second or first",
+                                         ordinals=True), [32, 1])
         self.assertEqual(extract_numbers("six trillion", short_scale=True),
                          [6e12])
         self.assertEqual(extract_numbers("six trillion", short_scale=False),
                          [6e18])
         self.assertEqual(extract_numbers("two pigs and six trillion bacteria",
                                          short_scale=True), [2, 6e12])
-        # TODO case when pronounced/extracted number don't match
-        # fractional numbers often fail
-        # self.assertEqual(extract_numbers("this is a seven eight nine and a "
-        #                                 "half test"),
-        #                 [7.0, 8.0, 9.5])
-        # TODO pronounce number should accept short_scale flag
-        # self.assertEqual(extract_numbers("two pigs and six trillion
-        # bacteria", short_scale=False), [2, 6e18])
-        # TODO pronounce_number should accept ordinals flag
-        # self.assertEqual(extract_numbers("thirty second or first",
-        #                                 ordinals=True), [32, 1])
+
+        self.assertEqual(extract_numbers("two pigs and six trillion bacteria",
+                                         short_scale=False), [2, 6e18])
 
     def test_contractions(self):
         self.assertEqual(normalize("ain't"), "is not")
