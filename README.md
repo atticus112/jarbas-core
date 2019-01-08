@@ -1,3 +1,14 @@
+# TEMPORARILY ARCHIVED
+
+this is meant as reference and is probably not a functional build, will be back soon!
+
+meanwhile please use regular mycroft-core, i am swampped with work and left this mid-update in a weird state
+
+if you are interested in this check some of the other branches, i have work all over the place
+
+this is what i use to test and deploy things in my own devices, it is not really meant for everyday users, yet!
+
+###
 jarbas - dev fork
 
 these changes are being made into PRs for mycroft-core and will be
