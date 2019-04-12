@@ -84,6 +84,8 @@ class KeySTT(STT):
 class GoogleSTT(TokenSTT):
     def __init__(self):
         super(GoogleSTT, self).__init__()
+        # allow None to use demo key by default
+        self.token = self.credential.get("token")
 
     def execute(self, audio, language=None):
         self.lang = language or self.lang
