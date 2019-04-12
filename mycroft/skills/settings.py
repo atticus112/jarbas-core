@@ -65,7 +65,7 @@ from threading import Timer
 from os.path import isfile, join, expanduser
 from requests.exceptions import RequestException
 
-from mycroft.api import DeviceApi, is_paired
+from mycroft.api import DeviceApi, is_paired, is_disabled
 from mycroft.util.log import LOG
 from mycroft.configuration import ConfigurationManager
 
@@ -133,6 +133,8 @@ class SkillSettings(dict):
     # TODO: break this up into two classes
     def initialize_remote_settings(self):
         """ initializes the remote settings to the server """
+        if is_disabled():
+            return
         # if settingsmeta.json exists (and is valid)
         # this block of code is a control flow for
         # different scenarios that may arises with settingsmeta
@@ -216,6 +218,8 @@ class SkillSettings(dict):
         Returns:
             dict: uuid, a unique id for the setting meta data
         """
+        if is_disabled():
+            return None
         try:
             uuid = self._put_metadata(settings_meta)
             return uuid
@@ -302,6 +306,8 @@ class SkillSettings(dict):
             settings_meta (dict): settingsmeta.json
             hashed_meta (str): {skill-folder}-settinsmeta.json
         """
+        if is_disabled():
+            return
         meta = self._migrate_settings(settings_meta)
         meta['identifier'] = str(hashed_meta)
         response = self._send_settings_meta(meta)
@@ -364,6 +370,8 @@ class SkillSettings(dict):
 
     def update_remote(self):
         """ update settings state from server """
+        if is_disabled():
+            return
         skills_settings = None
         settings_meta = self._load_settings_meta()
         if settings_meta is None:
@@ -385,6 +393,8 @@ class SkillSettings(dict):
             request settings and store it if it changes
             TODO: implement as websocket
         """
+        if is_disabled():
+            return
         original = hash(str(self))
         try:
             if not is_paired():
@@ -409,7 +419,7 @@ class SkillSettings(dict):
             return
 
         # continues to poll settings every minute
-        self._poll_timer = Timer(1 * 60, self._poll_skill_settings)
+        self._poll_timer = Timer(5 * 60, self._poll_skill_settings)
         self._poll_timer.daemon = True
         self._poll_timer.start()
 
@@ -488,6 +498,8 @@ class SkillSettings(dict):
         Returns:
             skill_settings (dict or None): returns a dict if matches
         """
+        if is_disabled():
+            return None
         settings = self._request_settings()
         if settings:
             # this loads the settings into memory for use in self.store
@@ -505,6 +517,8 @@ class SkillSettings(dict):
         Returns:
             dict: dictionary with settings collected from the server.
         """
+        if is_disabled():
+            return None
         try:
             settings = self.api.request({
                 "method": "GET",
@@ -524,6 +538,8 @@ class SkillSettings(dict):
         Returns:
             settings (dict or None): the retrieved settings or None
         """
+        if is_disabled():
+            return None
         path = \
             "/" + self._device_identity + "/userSkill?identifier=" + identifier
         try:
@@ -544,6 +560,8 @@ class SkillSettings(dict):
         Args:
             settings_meta (dict): dictionary of the current settings meta data
         """
+        if is_disabled():
+            return None
         settings_meta = self._type_cast(settings_meta, to_platform='web')
         return self.api.request({
             "method": "PUT",
@@ -557,6 +575,8 @@ class SkillSettings(dict):
         Args:
             uuid (str): unique id of the skill
         """
+        if is_disabled():
+            return
         try:
             LOG.debug("deleting metadata")
             self.api.request({
@@ -571,6 +591,8 @@ class SkillSettings(dict):
 
     @property
     def _should_upload_from_change(self):
+        if is_disabled():
+            return False
         changed = False
         if hasattr(self, '_remote_settings'):
             sections = self._remote_settings['skillMetadata']['sections']
