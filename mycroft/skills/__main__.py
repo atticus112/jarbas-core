@@ -28,11 +28,11 @@ from mycroft.util import (
 from mycroft.util.log import LOG
 from mycroft.util.lang import set_active_lang
 
-from .skill_manager import SkillManager, MsmException
-from .core import FallbackSkill
-from .event_scheduler import EventScheduler
-from .intent_service import IntentService
-from .padatious_service import PadatiousService
+from mycroft.skills.skill_manager import SkillManager, MsmException
+from mycroft.skills.core import FallbackSkill
+from mycroft.skills.event_scheduler import EventScheduler
+from mycroft.skills.intent_service import IntentService
+from mycroft.skills.padatious_service import PadatiousService
 
 bus = None  # Mycroft messagebus reference, see "mycroft.messagebus"
 event_scheduler = None
