@@ -1029,7 +1029,7 @@ class MycroftSkill:
                 if handler_info:
                     # Indicate that the skill handler is starting if requested
                     msg_type = handler_info + '.start'
-                    self.bus.emit(message.reply(msg_type, skill_data))
+                    self.bus.emit(message.forward(msg_type, skill_data))
 
                 if once:
                     # Remove registered one-time handler before invoking,
@@ -1056,7 +1056,7 @@ class MycroftSkill:
                 # Indicate that the skill handler has completed
                 if handler_info:
                     msg_type = handler_info + '.complete'
-                    self.bus.emit(message.reply(msg_type, skill_data))
+                    self.bus.emit(message.forward(msg_type, skill_data))
 
                 # Send timing metrics
                 context = message.context
@@ -1365,7 +1365,7 @@ class MycroftSkill:
                 'expect_response': expect_response}
         message = dig_for_message()
         if message:
-            self.bus.emit(message.reply("speak", data))
+            self.bus.emit(message.forward("speak", data))
         else:
             self.bus.emit(Message("speak", data))
         if wait:
@@ -1689,7 +1689,7 @@ class FallbackSkill(MycroftSkill):
 
         def handler(message):
             # indicate fallback handling start
-            bus.emit(message.reply("mycroft.skill.handler.start",
+            bus.emit(message.forward("mycroft.skill.handler.start",
                                    data={'handler': "fallback"}))
 
             stopwatch = Stopwatch()
@@ -1701,7 +1701,7 @@ class FallbackSkill(MycroftSkill):
                         if handler(message):
                             #  indicate completion
                             handler_name = get_handler_name(handler)
-                            bus.emit(message.reply(
+                            bus.emit(message.forward(
                                      'mycroft.skill.handler.complete',
                                      data={'handler': "fallback",
                                            "fallback_handler": handler_name}))
@@ -1709,11 +1709,11 @@ class FallbackSkill(MycroftSkill):
                     except Exception:
                         LOG.exception('Exception in fallback.')
                 else:  # No fallback could handle the utterance
-                    bus.emit(message.reply('complete_intent_failure'))
+                    bus.emit(message.forward('complete_intent_failure'))
                     warning = "No fallback could handle intent."
                     LOG.warning(warning)
                     #  indicate completion with exception
-                    bus.emit(message.reply('mycroft.skill.handler.complete',
+                    bus.emit(message.forward('mycroft.skill.handler.complete',
                                            data={'handler': "fallback",
                                                  'exception': warning}))
 
