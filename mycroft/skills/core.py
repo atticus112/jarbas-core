@@ -566,7 +566,7 @@ class MycroftSkill:
                            self.handle_set_cross_context)
             self.add_event("mycroft.skill.remove_cross_context",
                            self.handle_remove_cross_context)
-            self.add_event("converse.deactivate", self._deactivate)
+            self.add_event("converse.deactivate", self._deactivate_skill)
             name = 'mycroft.skills.settings.update'
             func = self.settings.run_poll
             bus.on(name, func)
