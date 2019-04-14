@@ -5,7 +5,7 @@ A fork of mycroft core
 - [Jarbas-Core](#jarbas-core)
   * [Privacy](#privacy)
     + [Disable the home backend completely](#disable-the-home-backend-completely)
-    + [Go offline with [pocketsphinx](https://github.com/cmusphinx/pocketsphinx)](#go-offline-with--pocketsphinx--https---githubcom-cmusphinx-pocketsphinx-)
+    + [Go offline with pocketsphinx](#go-offline-with--pocketsphinx)
     + [self hosted STT](#self-hosted-stt)
   * [Features](#features)
     + [Free Google STT](#free-google-stt)
@@ -42,11 +42,11 @@ or use the [personal backend](https://github.com/MycroftAI/personal-backend)
   }
 ```
 
-### Go offline with [pocketsphinx](https://github.com/cmusphinx/pocketsphinx) 
+### Go offline with pocketsphinx
 
 NOTE: terrible accuracy
 
-install pocketsphinx from source, pip package does not work
+install [pocketsphinx](https://github.com/cmusphinx/pocketsphinx) from source, pip package does not work
 
 (inside venv)
 ```
