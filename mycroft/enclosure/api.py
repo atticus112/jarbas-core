@@ -80,7 +80,6 @@ class EnclosureAPI:
         """
         self.bus.emit(Message("enclosure.system.blink", {'times': times},
                               context={"destination": ["enclosure"]}))
-
     def eyes_on(self):
         """Illuminate or show the eyes."""
         self.bus.emit(Message("enclosure.eyes.on",
@@ -103,7 +102,7 @@ class EnclosureAPI:
         """Make the eyes look narrow, like a squint"""
         self.bus.emit(Message("enclosure.eyes.narrow",
                               context={"destination": ["enclosure"]}))
-
+        
     def eyes_look(self, side):
         """Make the eyes look to the given side
         Args:
@@ -189,7 +188,7 @@ class EnclosureAPI:
             raise ValueError('volume ({}) must be between 0-11'.
                              format(str(volume)))
         self.bus.emit(Message("enclosure.eyes.volume", {'volume': volume},
-                              context={"destination": ["enclosure"]}))
+                              context={"destination": ["enclosure
 
     def mouth_reset(self):
         """Restore the mouth display to normal (blank)"""

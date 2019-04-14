@@ -84,6 +84,8 @@ class KeySTT(STT):
 class GoogleSTT(TokenSTT):
     def __init__(self):
         super(GoogleSTT, self).__init__()
+        # allow None to use demo key by default
+        self.token = self.credential.get("token")
 
     def execute(self, audio, language=None):
         self.lang = language or self.lang
@@ -183,6 +185,23 @@ class KaldiSTT(STT):
             return None
 
 
+class PocketSphinxSTT(BasicSTT):
+    def __init__(self, lang="en-us", config=None):
+        super(PocketSphinxSTT, self).__init__()
+        from mycroft.stt.pocketsphinx_stt import PS_Recognizer
+        self.recognizer = PS_Recognizer(self.lang)
+
+    def execute(self, audio, language=None):
+        language = language or self.lang
+        if language != self.lang:
+            LOG.info("Changing decoder language")
+            from mycroft.stt.pocketsphinx_stt import PS_Recognizer
+            self.lang = language
+            self.recognizer = PS_Recognizer(self.lang)
+
+        return self.recognizer.recognize(audio)
+
+
 class BingSTT(TokenSTT):
     def __init__(self):
         super(BingSTT, self).__init__()
@@ -234,7 +253,8 @@ class STTFactory:
         "govivace": GoVivaceSTT,
         "houndify": HoundifySTT,
         "deepspeech_server": DeepSpeechServerSTT,
-        "mycroft_deepspeech": MycroftDeepSpeechSTT
+        "mycroft_deepspeech": MycroftDeepSpeechSTT,
+        "pocketsphinx": PocketSphinxSTT
     }
 
     @staticmethod

@@ -35,6 +35,7 @@ function help() {
     echo "  voice                    voice capture service"
     # echo "  wifi                     wifi setup service"
     echo "  enclosure                mark_1 enclosure service"
+    echo "  bus_monitor              monitor all bus messages real time"
     echo
     echo "Tool COMMANDs:"
     echo "  cli                      the Command Line Interface"
@@ -62,6 +63,7 @@ _module=""
 function name-to-script-path() {
     case ${1} in
         "bus")               _module="mycroft.messagebus.service" ;;
+        "bus_monitor")       _module="mycroft.messagebus" ;;
         "skills")            _module="mycroft.skills" ;;
         "audio")             _module="mycroft.audio" ;;
         "voice")             _module="mycroft.client.speech" ;;
@@ -197,6 +199,9 @@ case ${_opt} in
         ;;
 
     "bus")
+        launch-background ${_opt}
+        ;;
+    "bus_monitor")
         launch-background ${_opt}
         ;;
     "audio")
