@@ -62,7 +62,7 @@ def handle_utterance(event):
     LOG.info("Utterance: " + str(event['utterances']))
     context = {'client_name': 'mycroft_listener',
                'source': 'audio',
-               'destination': None}
+               'destination': ["skills"]}
     if 'ident' in event:
         ident = event.pop('ident')
         context['ident'] = ident

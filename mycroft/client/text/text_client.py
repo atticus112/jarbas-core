@@ -1323,7 +1323,11 @@ def gui_main(stdscr):
                     # Treat this as an utterance
                     bus.emit(Message("recognizer_loop:utterance",
                                      {'utterances': [line.strip()],
-                                      'lang': config.get('lang', 'en-us')}))
+                                      'lang': config.get('lang', 'en-us')},
+                                     {'client_name': 'mycroft_cli',
+                                      'source': 'cli',
+                                      'destination': ["skills"]}
+                                     ))
                 hist_idx = -1
                 line = ""
             elif code == 16 or code == 545:  # Ctrl+P or Ctrl+Left (Previous)
@@ -1413,7 +1417,10 @@ def simple_cli():
             print("Input (Ctrl+C to quit):")
             line = sys.stdin.readline()
             bus.emit(Message("recognizer_loop:utterance",
-                             {'utterances': [line.strip()]}))
+                             {'utterances': [line.strip()]},
+                             {'client_name': 'mycroft_simple_cli',
+                              'source': 'cli',
+                              'destination': ["skills"]}))
     except KeyboardInterrupt as e:
         # User hit Ctrl+C to quit
         print("")
