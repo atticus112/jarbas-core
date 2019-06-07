@@ -70,7 +70,7 @@ from threading import Timer, Thread
 
 from msm import SkillEntry
 
-from mycroft.api import DeviceApi, is_paired
+from mycroft.api import DeviceApi, is_paired, is_disabled
 from mycroft.util.log import LOG
 from mycroft.util import camel_case_split
 from mycroft.configuration import ConfigurationManager
@@ -207,6 +207,8 @@ class SkillSettings(dict):
     # TODO: break this up into two classes
     def initialize_remote_settings(self):
         """ initializes the remote settings to the server """
+        if is_disabled():
+            return
         # if the settingsmeta file exists (and is valid)
         # this block of code is a control flow for
         # different scenarios that may arises with settingsmeta
@@ -297,6 +299,8 @@ class SkillSettings(dict):
         Returns:
             dict: uuid, a unique id for the setting meta data
         """
+        if is_disabled():
+            return None
         try:
             uuid = self.api.upload_skill_metadata(
                 self._type_cast(settings_meta, to_platform='web'))
@@ -353,6 +357,8 @@ class SkillSettings(dict):
             settings_meta (dict): settingsmeta.json or settingsmeta.yaml
             identifier (str): identifier for skills meta data
         """
+        if is_disabled():
+            return
         LOG.debug('Uploading settings meta for {}'.format(identifier))
         meta = self._migrate_settings(settings_meta)
         meta['identifier'] = identifier
@@ -364,6 +370,8 @@ class SkillSettings(dict):
 
     def update_remote(self):
         """ update settings state from server """
+        if is_disabled():
+            return
         settings_meta = self._load_settings_meta()
         if settings_meta is None:
             return
@@ -401,6 +409,8 @@ class SkillSettings(dict):
             request settings and store it if it changes
             TODO: implement as websocket
         """
+        if is_disabled():
+            return
         delay = 1
         original = hash(str(self))
         try:
@@ -509,6 +519,8 @@ class SkillSettings(dict):
         Returns:
             skill_settings (dict or None): returns a dict if matches
         """
+        if is_disabled():
+            return None
         settings = self._request_settings()
         if settings:
             # this loads the settings into memory for use in self.store
@@ -527,6 +539,8 @@ class SkillSettings(dict):
         Returns:
             dict: dictionary with settings collected from the server.
         """
+        if is_disabled():
+            return None
         try:
             settings = self.api.get_skill_settings()
         except RequestException:
@@ -537,6 +551,8 @@ class SkillSettings(dict):
 
     @property
     def _should_upload_from_change(self):
+        if is_disabled():
+            return False
         changed = False
         if (hasattr(self, '_remote_settings') and
                 'skillMetadata' in self._remote_settings):
