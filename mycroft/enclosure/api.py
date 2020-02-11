@@ -311,7 +311,7 @@ class EnclosureAPI:
             return response.data["pixels"]
         raise TimeoutError("Enclosure took too long to respond")
 
-    def get_eyes_pixe_colorl(self, idx):
+    def get_eyes_pixel_color(self, idx):
         """
         Get the RGB color for a specific eye pixel
 
